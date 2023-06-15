@@ -1,6 +1,6 @@
 Attribute VB_Name = "Module1"
 Option Explicit
-Dim cn              As New ADODB.Connection
+Dim cn                As New ADODB.Connection
 Dim vConnectionString As String
 
 Public Sub Main()
@@ -125,16 +125,11 @@ Public Function DataBaseSelectSQL(ClassName As String, strSQL As String) As Vari
         Next field
         
         Set objReturn(i) = objClass
-        
-        ' Avance para o próximo registro
         rs.MoveNext
         i = i + 1
     Loop
-    
-    ' Feche o objeto Recordset
     rs.Close
     Set rs = Nothing
     
-    ' Retorne o array de objetos da classe desejada
     DataBaseSelectSQL = objReturn
 End Function
