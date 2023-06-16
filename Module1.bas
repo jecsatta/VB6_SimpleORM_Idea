@@ -40,12 +40,12 @@ Public Sub Main()
     If HasValues(objArray) Then
         Debug.Print "Count:" & UBound(objArray)
         For i = 1 To UBound(objArray)
-          Set objClient = objArray(i)
+           Set objClient = objArray(i)
            Debug.Print "ID:" & objClient.ID
            Debug.Print "Name:" & objClient.Name
            Debug.Print "Age:" & objClient.Age
            Debug.Print "Email:" & objClient.Email
-           Debug.Print ""
+           Debug.Print "Errors:"; objClient.AsIBaseClass.CheckErrors
            Debug.Print ""
         Next i
     End If

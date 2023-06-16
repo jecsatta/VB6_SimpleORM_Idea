@@ -29,6 +29,13 @@ Public Sub Class_Initialize()
    
    
 End Sub
+Public Function AsIBaseClass() As IBaseClass
+    Set AsIBaseClass = Me
+End Function
+
+Private Function IBaseClass_CheckErrors() As String
+    IBaseClass_CheckErrors = namedClass.CheckErrors
+End Function
 
 Private Function IBaseClass_GetTableName() As String
         IBaseClass_GetTableName = "employee"

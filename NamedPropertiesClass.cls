@@ -27,6 +27,16 @@ Public Function GetPropertyIndex(ByVal propName As String) As Integer
     GetPropertyIndex = -1
 End Function
 
+Public Function CheckErrors() As String
+    Dim i As Integer
+    Dim result As String
+    
+    result = ""
+    For i = LBound(Properties) To UBound(Properties)
+        result = result + Properties(i).CheckErrors
+    Next i
+    CheckErrors = result
+End Function
 
 Public Property Get PropertyByName(ByVal propName As String) As Variant
     Dim propIndex As Integer
@@ -40,17 +50,17 @@ Public Property Let PropertyByName(ByVal propName As String, ByVal propValue As 
     Properties(propIndex).value = propValue
 End Property
 
-Public Sub AddWithValue(ByVal propName As String, ByVal propValue As Variant, Optional ByVal annotationDef As AnnotationDefinition = none, Optional ByVal annotationValue As Variant)
+Public Sub AddWithValue(ByVal propName As String, ByVal propValue As Variant, Optional ByVal annotationDef As AnnotationDefinition = None, Optional ByVal annotationValue As Variant)
     Add propName, annotationDef, annotationValue
     Properties(propNumber - 1).value = propValue
 End Sub
 
-Public Function Add(ByVal propName As String, Optional ByVal annotationDef As AnnotationDefinition = none, Optional ByVal annotationValue As Variant) As clsProperty
+Public Function Add(ByVal propName As String, Optional ByVal annotationDef As AnnotationDefinition = None, Optional ByVal annotationValue As Variant) As clsProperty
     ReDim Preserve Properties(propNumber) As clsProperty
     Dim prop As New clsProperty
     prop.Name = propName
     
-    If annotationDef <> none Then
+    If annotationDef <> None Then
         prop.AddAnnotation annotationDef, annotationValue
     End If
     Set Properties(propNumber) = prop

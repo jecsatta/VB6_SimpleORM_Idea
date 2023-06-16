@@ -6,17 +6,13 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "IBaseClass"
+Attribute VB_Name = "clsValidator"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Public Function GetTableName() As String
-        
+Public Function Validator_Age(value As Variant) As Boolean
+    Validator_Age = (value >= 40)
 End Function
 
-Public Function Props() As NamedPropertiesClass
-End Function
 
-Public Function CheckErrors() As String
-End Function

@@ -22,10 +22,17 @@ Public Sub Class_Initialize()
     Set namedClass = New NamedPropertiesClass
     namedClass.Add "id", PrimaryKey, True
     namedClass.Add "Name"
-    namedClass.Add "Age"
+    namedClass.Add "Age", validator, V_AgeValidator
     namedClass.Add "Email"
     
 End Sub
+Public Function AsIBaseClass() As IBaseClass
+    Set AsIBaseClass = Me
+End Function
+
+Private Function IBaseClass_CheckErrors() As String
+    IBaseClass_CheckErrors = namedClass.CheckErrors
+End Function
 
 Private Function IBaseClass_GetTableName() As String
         IBaseClass_GetTableName = "client"
@@ -67,3 +74,5 @@ End Property
 Public Property Get Email() As Variant
     Email = namedClass.PropertyByName("Email")
 End Property
+
+

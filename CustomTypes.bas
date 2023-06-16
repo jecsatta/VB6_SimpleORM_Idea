@@ -9,6 +9,7 @@ Public Enum AnnotationDefinition
     MaxLength
     MinLength
     Required
+    validator
 End Enum
 
 
