@@ -17,11 +17,17 @@ Implements IBaseClass
 
 
 Private namedClass As NamedPropertiesClass
-Private Const PROPERTY_NAMES As String = "ID,Name,Position,Email"
+ 
     
 Public Sub Class_Initialize()
     Set namedClass = New NamedPropertiesClass
-    namedClass.ConfigPropertyNames = PROPERTY_NAMES
+    namedClass.Add("id").AddAnnotation PrimaryKey, True
+    
+    namedClass.Add "Name"
+    namedClass.Add "Position"
+    namedClass.Add "Email"
+   
+   
 End Sub
 
 Private Function IBaseClass_GetTableName() As String

@@ -11,14 +11,15 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Private NamedProperties() As Variant
-Private PropertyNames() As String
+Option Explicit
 
+Private Properties() As clsProperty
+Private propNumber As Long
 
 Public Function GetPropertyIndex(ByVal propName As String) As Integer
     Dim i As Integer
-    For i = LBound(PropertyNames) To UBound(PropertyNames)
-        If PropertyNames(i) = propName Then
+    For i = LBound(Properties) To UBound(Properties)
+        If LCase(Properties(i).Name) = LCase(propName) Then
             GetPropertyIndex = i
             Exit Function
         End If
@@ -26,25 +27,58 @@ Public Function GetPropertyIndex(ByVal propName As String) As Integer
     GetPropertyIndex = -1
 End Function
 
-Public Property Let ConfigPropertyNames(PROPERTY_NAMES As String)
-    PropertyNames = Split(PROPERTY_NAMES, ",")
-    ReDim NamedProperties(UBound(PropertyNames)) As Variant
-End Property
-
 
 Public Property Get PropertyByName(ByVal propName As String) As Variant
     Dim propIndex As Integer
     propIndex = GetPropertyIndex(propName)
-    PropertyByName = NamedProperties(propIndex)
+    PropertyByName = Properties(propIndex).value
 End Property
 
 Public Property Let PropertyByName(ByVal propName As String, ByVal propValue As Variant)
     Dim propIndex As Integer
     propIndex = GetPropertyIndex(propName)
-    NamedProperties(propIndex) = propValue
+    Properties(propIndex).value = propValue
 End Property
 
-Public Property Get Count() As Integer
-    Count = UBound(PropertyNames)
+Public Sub AddWithValue(ByVal propName As String, ByVal propValue As Variant, Optional ByVal annotationDef As AnnotationDefinition = none, Optional ByVal annotationValue As Variant)
+    Add propName, annotationDef, annotationValue
+    Properties(propNumber - 1).value = propValue
+End Sub
+
+Public Function Add(ByVal propName As String, Optional ByVal annotationDef As AnnotationDefinition = none, Optional ByVal annotationValue As Variant) As clsProperty
+    ReDim Preserve Properties(propNumber) As clsProperty
+    Dim prop As New clsProperty
+    prop.Name = propName
+    
+    If annotationDef <> none Then
+        prop.AddAnnotation annotationDef, annotationValue
+    End If
+    Set Properties(propNumber) = prop
+    propNumber = propNumber + 1
+    Set Add = prop
+End Function
+ 
+Public Function GetProperties() As clsProperty()
+    GetProperties = Properties
+End Function
+
+Public Function GetPropertyValues() As Variant()
+    Dim values() As Variant
+    Dim i As Integer
+    
+    ReDim values(LBound(Properties) To UBound(Properties)) As Variant
+    For i = LBound(Properties) To UBound(Properties)
+        values(i) = Properties(i).value
+    Next i
+    
+    GetPropertyValues = values
+End Function
+
+
+Public Property Get count() As Integer
+    count = propNumber
 End Property
 
+Private Sub Class_Initialize()
+    propNumber = 0
+End Sub
