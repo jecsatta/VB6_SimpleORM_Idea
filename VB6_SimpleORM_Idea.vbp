@@ -1,6 +1,7 @@
 Type=Exe
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\Windows\SysWOW64\stdole2.tlb#OLE Automation
 Reference=*\G{00000201-0000-0010-8000-00AA006D2EA4}#2.1#0#..\..\..\Program Files (x86)\Common Files\System\ado\msado21.tlb#Microsoft ActiveX Data Objects 2.1 Library
+Reference=*\G{420B2830-E718-11CF-893D-00A0C9054228}#1.0#0#..\..\..\Windows\SysWOW64\scrrun.dll#Microsoft Scripting Runtime
 Form=Form1.frm
 Class=clsClient; clsClient.cls
 Class=NamedPropertiesClass; NamedPropertiesClass.cls
@@ -10,6 +11,8 @@ Module=Module1; Module1.bas
 Class=BaseClassFactory; BaseClassFactory.cls
 Module=Classes_Handler; Classes_Handler.bas
 Module=Classes_Constants; Classes_Constants.bas
+Class=clsParams; clsParams.cls
+Class=clsParam; clsParam.cls
 IconForm="Form1"
 Startup="Sub Main"
 HelpFile=""

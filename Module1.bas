@@ -4,31 +4,80 @@ Dim cn                As New ADODB.Connection
 Dim vConnectionString As String
 
 Public Sub Main()
-     Dim objArray As Variant
-     Dim objClient As clsClient
-     Dim i As Long
+    Dim objArray As Variant
+    Dim objClient As clsClient
+    Dim objEmployee As clsEmployee
+    Dim dictParams As New Dictionary
+    Dim i As Long
+    
+    vConnectionString = "Provider=MSDASQL.1;Persist Security Info=False;User ID=postgres;Data Source=PostConnection"
+    cn.ConnectionString = vConnectionString
+    cn.Open
+    cn.Execute "create table if not exists client(id serial primary key, name text,age int,email text);"
+    cn.Execute "create table if not exists employee(id serial primary key, name text,position text,email text);"
+    'cn.Execute "insert into client values(default,'Jhon',28,'jhon@example.com')"
+    'cn.Execute "insert into client values(default,'Mary',31,'mary@example.com')"
+    
+    'cn.Execute "insert into employee values(default,'Jhon','CTO','mary@example.com')"
+    'cn.Execute "insert into employee values(default,'Mary','CFO','mary@example.com')"
+    
+'    objArray = DataBaseSelectSQL(C_clsClient, "select * from client")
+'    Debug.Print "Count:" & UBound(objArray)
+'    For i = 1 To UBound(objArray)
+'      Set objClient = objArray(i)
+'       Debug.Print "ID:" & objClient.ID
+'       Debug.Print "Name:" & objClient.Name
+'       Debug.Print "Age:" & objClient.Age
+'       Debug.Print "Email:" & objClient.Email
+'       Debug.Print ""
+'       Debug.Print ""
+'    Next i
      
-     vConnectionString = "Provider=MSDASQL.1;Persist Security Info=False;User ID=postgres;Data Source=PostConnection"
-     cn.ConnectionString = vConnectionString
-     cn.Open
-     cn.Execute "create table if not exists client(id serial primary key, name text,age int,email text);"
-     cn.Execute "create table if not exists employee(id serial primary key, name text,position text,email text);"
-     'cn.Execute "insert into client values(default,'Jhon',28,'jhon@example.com')"
-     'cn.Execute "insert into client values(default,'Mary',31,'mary@example.com')"
-     objArray = DataBaseSelectSQL(C_clsClient, "select * from client")
-     For i = 1 To UBound(objArray)
-       Set objClient = objArray(i)
-        Debug.Print "ID:" & objClient.ID
-        Debug.Print "Name:" & objClient.Name
-        Debug.Print "Age:" & objClient.Age
-        Debug.Print "Email:" & objClient.Email
-        Debug.Print ""
-        Debug.Print ""
-     Next i
-     Debug.Print "Count:" & UBound(objArray)
-     
+    Dim params As New clsParams
+    params.Add "name", "%mary%", "ilike"
+    params.Add "id", 6
+    objArray = DataBaseSelect(C_clsClient, params)
+    If HasValues(objArray) Then
+        Debug.Print "Count:" & UBound(objArray)
+        For i = 1 To UBound(objArray)
+          Set objClient = objArray(i)
+           Debug.Print "ID:" & objClient.ID
+           Debug.Print "Name:" & objClient.Name
+           Debug.Print "Age:" & objClient.Age
+           Debug.Print "Email:" & objClient.Email
+           Debug.Print ""
+           Debug.Print ""
+        Next i
+    End If
+    
+    objArray = DataBaseSelectSQL(C_clsEmployee, "select * from employee")
+    If HasValues(objArray) Then
+        Debug.Print "Count:" & UBound(objArray)
+        For i = 1 To UBound(objArray)
+          Set objEmployee = objArray(i)
+           Debug.Print "ID:" & objEmployee.ID
+           Debug.Print "Name:" & objEmployee.Name
+           Debug.Print "Position:" & objEmployee.Position
+           Debug.Print "Email:" & objEmployee.Email
+           Debug.Print ""
+           Debug.Print ""
+        Next i
+     End If
 
 End Sub
+Public Function HasValues(arr As Variant) As Boolean
+    Dim n As Long
+    On Error Resume Next
+    Err.Clear
+    n = LBound(arr)
+    If Err.Number = 0 Then
+        HasValues = True
+    Else
+        HasValues = False
+        Err.Clear
+    End If
+    On Error GoTo 0
+End Function
 Public Function HasProperty(obj As Object, propName As String) As Boolean
     On Error Resume Next
     Dim propValue As Variant
@@ -53,7 +102,7 @@ Public Function HasMethod(ByVal obj As Object, ByVal methodName As String) As Bo
     On Error GoTo 0
 End Function
 
-Public Function DataBaseSelect(ClassName As String, paramName() As String, paramValue() As String, Optional intLimit As Integer = 0, Optional strOrderBy As String = "") As Variant
+Public Function DataBaseSelect(ClassName As String, params As clsParams, Optional intLimit As Integer = 0, Optional strOrderBy As String = "") As Variant
     Dim strSQL As String
     Dim tableName As String
     Dim i As Integer
@@ -61,27 +110,19 @@ Public Function DataBaseSelect(ClassName As String, paramName() As String, param
     Dim objReturn() As Variant
     Dim objClass As IBaseClass
     
-    If UBound(paramName) <> UBound(paramValue) Then
-        DataBaseSelect = objReturn
-    End If
-    
-    objClass = GetCreate(ClassName)
+   Set objClass = GetCreate(ClassName)
     
     tableName = objClass.GetTableName()
     strSQL = "SELECT * FROM " & tableName & " WHERE "
 
-    
-    For i = 0 To UBound(paramName) - 1
-        Dim propValue As Variant
-        propValue = objClass.Props().PropertyByName(paramName(i))
-        strSQL = strSQL & paramName(i) & " = '" & propValue & "' AND "
-    Next i
+    params.First
+    Do Until params.EOF
+        strSQL = strSQL & params.Name & " " & params.Operator & " '" & params.value & "' AND "
+        params.MoveNext
+    Loop
+    strSQL = Mid(strSQL, 1, Len(strSQL) - 4)
 
 
-    lastParamValue = objClass.Props().PropertyByName(paramName(UBound(paramName)))
-    strSQL = strSQL & paramName(UBound(paramName)) & " = '" & lastParamValue & "'"
-
-    
     If Not strOrderBy = "" And InStr(1, UCase(strOrderBy), "ORDER BY") > 1 Then
         strSQL = strSQL & strOrderBy
     End If
@@ -108,8 +149,6 @@ Public Function DataBaseSelectSQL(ClassName As String, strSQL As String) As Vari
         DataBaseSelectSQL = objReturn
         Exit Function
     End If
-    
-    
     
     
     i = 1
