@@ -1,5 +1,5 @@
 # VB6 Simple ORM Idea
-Just a simple idea of how to create dynamic classes using vb6 to perform access and fetch data stored in a database.
+Just a simple idea of how to create dynamic classes using vb6 to perform access and fetch data stored in a database and little more.
 
 :warning: *This is a working in progress*
 
@@ -21,16 +21,27 @@ If HasValues(objArray) Then
        Debug.Print "Name:" & objClient.Name
        Debug.Print "Age:" & objClient.Age
        Debug.Print "Email:" & objClient.Email
+       Debug.Print "Errors:" &  objClient.AsIBaseClass.CheckErrors
        Debug.Print ""
        Debug.Print ""
     Next i
 End If
+
+'Example of execution
+Count:1
+ID:6
+Name:Mary
+Age:31
+Email:mary@example.com
+Errors:Age value is invalid
 ```
+
+#### Classes setup
 Databases classes must implement `IBaseClass`
 
 In `Class_Initialize` all properties and annotations must be added
+`File:clsClient.bas`
 ```vb6
-'Class:clsClient
 
 Implements IBaseClass
 Private namedClass As NamedPropertiesClass
@@ -39,7 +50,7 @@ Public Sub Class_Initialize()
     Set namedClass = New NamedPropertiesClass
     namedClass.Add("id", PrimaryKey, True).AddAnnotation AutoIncrement, True
     namedClass.Add "Name"
-    namedClass.Add "Age"
+    namedClass.Add "Age", Validator, V_AgeValidator
     namedClass.Add "Email"
 End Sub
 
@@ -52,7 +63,7 @@ Private Function IBaseClass_Props() As NamedPropertiesClass
 End Function
 ```
 
-Property implementation
+#### Properties implementation
 ```vb6
 Public Property Let ID(ByVal value As Variant)
     namedClass.PropertyByName("ID") = value
@@ -62,7 +73,19 @@ Public Property Get ID() As Variant
     ID = namedClass.PropertyByName("ID")
 End Property
 ```
+#### Validators 
+All Validator must be in `clsValidator` and in `Validator_Constants`
 
+`File:clsValidator.bas`
+```vb6
+Public Function Validator_Age(value As Variant) As Boolean
+    Validator_Age = (value >= 40)
+End Function
+```
+`File:Validator_Constants.bas`
+```vb6
+Public Const V_AgeValidator As String = "Validator_Age"
+```
 
 | To-do | Status |
 | --- | :---: |
@@ -74,5 +97,6 @@ End Property
 | update routine||
 | insert routine|working|
 | transaction support||
+| external validators support| :white_check_mark: |
 
 License: [GNU General Public License v3.0](LICENSE)
