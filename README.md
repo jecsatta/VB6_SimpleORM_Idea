@@ -6,10 +6,10 @@ Just a simple idea of how to create dynamic classes using vb6 to perform access 
 | Dynamic properties  | :white_check_mark: |
 | Select with simple text  | :white_check_mark: |
 | Select with parametrized query|  :white_check_mark: |
-| annotations support||
+| annotations support| :white_check_mark: |
 | create routine||
 | update routine||
-| insert routine||
+| insert routine|working|
 | transaction support||
 
 License: [GNU General Public License v3.0](LICENSE)
