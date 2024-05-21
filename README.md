@@ -1,14 +1,25 @@
 # VB6 Simple ORM Idea
 Just a simple idea of how to create dynamic classes using vb6 to perform access and fetch data stored in a database and little more.
 
-:warning: *This is a working in progress*
-
 ## Usage
 ```vb6
 Dim objArray As Variant
 Dim objClient As clsClient
 Dim i As Long
 Dim params As New clsParams
+
+Set objClient = GetCreate(C_clsClient)
+
+objClient.ID = 1
+objClient.Name = "Updated client"
+objClient.Age = 35
+objClient.Email = "client@example.com"
+ 'Save the client (insert or update based on primary key)
+If objClient.AsIBaseClass.Save Then
+    Debug.Print "Client saved successfully!"
+Else
+    Debug.Print "Error saving client."
+End If
 
 params.Add "name", "%mary%", "ilike"
 params.Add "id", 6
@@ -93,9 +104,9 @@ Public Const V_AgeValidator As String = "Validator_Age"
 | Select with simple text  | :white_check_mark: |
 | Select with parametrized query|  :white_check_mark: |
 | annotations support| :white_check_mark: |
-| create routine||
-| update routine||
-| insert routine|working|
+| create routine| in future|
+| update routine|:white_check_mark:|
+| insert routine|:white_check_mark:|
 | transaction support||
 | external validators support| :white_check_mark: |
 
