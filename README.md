@@ -10,7 +10,7 @@ Dim params As New clsParams
 
 Set objClient = GetCreate(C_clsClient)
 
-objClient.ID = 1
+'objClient.ID = 1
 objClient.Name = "Updated client"
 objClient.Age = 35
 objClient.Email = "client@example.com"
