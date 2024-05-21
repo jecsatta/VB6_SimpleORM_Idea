@@ -10,6 +10,7 @@ Public Enum AnnotationDefinition
     MinLength
     Required
     validator
+    Computed
 End Enum
 
 

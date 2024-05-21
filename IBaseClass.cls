@@ -20,3 +20,6 @@ End Function
 
 Public Function CheckErrors() As String
 End Function
+
+Public Function Save() As Boolean
+End Function

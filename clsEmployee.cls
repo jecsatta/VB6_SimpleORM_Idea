@@ -45,6 +45,9 @@ Private Function IBaseClass_Props() As NamedPropertiesClass
         IBaseClass_Props = namedClass
 End Function
 
+Private Function IBaseClass_Save() As Boolean
+    IBaseClass_Save = DataBaseSave(C_clsEmployee, Me)
+End Function
 
 Public Property Let ID(ByVal value As Variant)
     namedClass.PropertyByName("ID") = value

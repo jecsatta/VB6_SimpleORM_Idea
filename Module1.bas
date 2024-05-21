@@ -20,22 +20,35 @@ Public Sub Main()
     
     'cn.Execute "insert into employee values(default,'Jhon','CTO','mary@example.com')"
     'cn.Execute "insert into employee values(default,'Mary','CFO','mary@example.com')"
+    Set objClient = GetCreate(C_clsClient)
     
-'    objArray = DataBaseSelectSQL(C_clsClient, "select * from client")
-'    Debug.Print "Count:" & UBound(objArray)
-'    For i = 1 To UBound(objArray)
-'      Set objClient = objArray(i)
-'       Debug.Print "ID:" & objClient.ID
-'       Debug.Print "Name:" & objClient.Name
-'       Debug.Print "Age:" & objClient.Age
-'       Debug.Print "Email:" & objClient.Email
-'       Debug.Print ""
-'       Debug.Print ""
-'    Next i
+    objClient.ID = 1
+    objClient.Name = "Updated client"
+    objClient.Age = 35
+    objClient.Email = "client@example.com"
+     'Save the client (insert or update based on primary key)
+    If objClient.AsIBaseClass.Save Then
+        Debug.Print "Client saved successfully!"
+    Else
+        Debug.Print "Error saving client."
+    End If
+    
+    objArray = DataBaseSelectSQL(C_clsClient, "select * from client")
+    Debug.Print "Count:" & UBound(objArray)
+    For i = 1 To UBound(objArray)
+      Set objClient = objArray(i)
+       Debug.Print "ID:" & objClient.ID
+       Debug.Print "Name:" & objClient.Name
+       Debug.Print "Age:" & objClient.Age
+       Debug.Print "Email:" & objClient.Email
+       Debug.Print ""
+       Debug.Print ""
+    Next i
+     
      
     Dim params As New clsParams
-    params.Add "name", "%mary%", "ilike"
-    params.Add "id", 6
+    params.Add "name", "%New%", "ilike"
+  '  params.Add "id", 6
     objArray = DataBaseSelect(C_clsClient, params)
     If HasValues(objArray) Then
         Debug.Print "Count:" & UBound(objArray)

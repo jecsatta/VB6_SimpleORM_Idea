@@ -52,14 +52,17 @@ Public Sub AddAnnotation(ByVal annotationDef As AnnotationDefinition, ByVal anno
 
     annotationsCount = annotationsCount + 1
 End Sub
-Private Function isRequired() As Boolean
+Public Function isRequired() As Boolean
     isRequired = CheckAnnotationValue(Required, True)
 End Function
 
-Private Function isPrimaryKey() As Boolean
+Public Function isPrimaryKey() As Boolean
     isPrimaryKey = CheckAnnotationValue(PrimaryKey, True)
 End Function
 
+Public Function isComputed() As Boolean
+    isComputed = CheckAnnotationValue(Computed, True)
+End Function
 
 Public Function CheckErrors() As String
     Dim i As Integer
@@ -80,7 +83,7 @@ End Function
 Private Function CheckAnnotationValue(anotation As AnnotationDefinition, value As Variant) As Boolean
     CheckAnnotationValue = False
     Dim i As Integer
-    For i = 0 To annotationsCount
+    For i = 0 To annotationsCount - 1
         If mAnnotations(i).Definition = anotation Then
             If mAnnotations(i).value = True Then
                 CheckAnnotationValue = True
