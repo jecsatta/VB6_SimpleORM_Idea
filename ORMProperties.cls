@@ -6,14 +6,14 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "NamedPropertiesClass"
+Attribute VB_Name = "ORMProperties"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private Properties() As clsProperty
+Private Properties() As ORMProperty
 Private propNumber As Long
 
 Public Function GetPropertyIndex(ByVal propName As String) As Integer
@@ -55,9 +55,9 @@ Public Sub AddWithValue(ByVal propName As String, ByVal propValue As Variant, Op
     Properties(propNumber - 1).value = propValue
 End Sub
 
-Public Function Add(ByVal propName As String, Optional ByVal annotationDef As AnnotationDefinition = None, Optional ByVal annotationValue As Variant) As clsProperty
-    ReDim Preserve Properties(propNumber) As clsProperty
-    Dim prop As New clsProperty
+Public Function Add(ByVal propName As String, Optional ByVal annotationDef As AnnotationDefinition = None, Optional ByVal annotationValue As Variant) As ORMProperty
+    ReDim Preserve Properties(propNumber) As ORMProperty
+    Dim prop As New ORMProperty
     prop.Name = propName
     
     If annotationDef <> None Then
@@ -68,7 +68,7 @@ Public Function Add(ByVal propName As String, Optional ByVal annotationDef As An
     Set Add = prop
 End Function
  
-Public Function GetProperties() As clsProperty()
+Public Function GetProperties() As ORMProperty()
     GetProperties = Properties
 End Function
 

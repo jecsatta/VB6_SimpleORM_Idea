@@ -1,6 +1,8 @@
-Attribute VB_Name = "ReflectionSimulator"
+Attribute VB_Name = "ORMReflectionSimulator"
+Option Explicit
+
 Public Function GetCreate(ClassName As String) As Object
-    Dim factory As New BaseClassFactory
+    Dim factory As New ORMBaseClassFactory
     If HasMethod(factory, ClassName & "_Create") Then
         Set GetCreate = CallByName(factory, ClassName & "_Create", VbMethod)
     End If

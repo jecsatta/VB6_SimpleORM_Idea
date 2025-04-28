@@ -6,7 +6,7 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "clsProperty"
+Attribute VB_Name = "ORMProperty"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
@@ -15,7 +15,7 @@ Option Explicit
 
 Private mName As String
 Private mValue As Variant
-Private mAnnotations() As clsAnnotation
+Private mAnnotations() As ORMAnnotation
 Private annotationsCount As Long
 
 Public Property Get Name() As String
@@ -34,19 +34,19 @@ Public Property Let value(ByVal value As Variant)
     mValue = value
 End Property
 
-Public Property Get Annotations() As clsAnnotation()
+Public Property Get Annotations() As ORMAnnotation()
     Annotations = mAnnotations
 End Property
 
-Public Property Let Annotations(values() As clsAnnotation)
+Public Property Let Annotations(values() As ORMAnnotation)
     mAnnotations = values
 End Property
 Public Sub AddAnnotation(ByVal annotationDef As AnnotationDefinition, ByVal annotationValue As Variant)
-    Dim annotation As New clsAnnotation
+    Dim annotation As New ORMAnnotation
     annotation.Definition = annotationDef
     annotation.value = annotationValue
     
-    ReDim Preserve mAnnotations(annotationsCount) As clsAnnotation
+    ReDim Preserve mAnnotations(annotationsCount) As ORMAnnotation
     
     Set mAnnotations(annotationsCount) = annotation
 

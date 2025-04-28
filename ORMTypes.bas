@@ -1,4 +1,4 @@
-Attribute VB_Name = "CustomTypes"
+Attribute VB_Name = "ORMTypes"
 Option Explicit
 
 Public Enum AnnotationDefinition
@@ -9,7 +9,7 @@ Public Enum AnnotationDefinition
     MaxLength
     MinLength
     Required
-    validator
+    Validator
     Computed
 End Enum
 

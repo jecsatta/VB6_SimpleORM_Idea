@@ -6,13 +6,14 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "clsParams"
+Attribute VB_Name = "ORMParams"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-Private params() As clsParam
+
+Private params() As ORMParam
 Private currentPosition As Long
 Private count As Long
 
@@ -41,14 +42,14 @@ Public Property Get Operator() As String
 End Property
 
 Public Sub Add(ByVal paramName As String, ByVal paramValue As Variant, Optional ByVal paramOperator As String = "=")
-    Dim param As New clsParam
+    Dim param As New ORMParam
     param.Name = paramName
     param.value = paramValue
     param.Operator = paramOperator
     
      
  
-    ReDim Preserve params(count) As clsParam
+    ReDim Preserve params(count) As ORMParam
     Set params(count) = param
     count = count + 1
 End Sub

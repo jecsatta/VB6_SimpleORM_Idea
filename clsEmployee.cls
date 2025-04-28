@@ -13,71 +13,71 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Implements IBaseClass
+Implements ORMBaseClass
 
 
-Private namedClass As NamedPropertiesClass
+Private mProperties As ORMProperties
  
     
 Public Sub Class_Initialize()
-    Set namedClass = New NamedPropertiesClass
-    namedClass.Add("id").AddAnnotation PrimaryKey, True
+    Set mProperties = New ORMProperties
+    mProperties.Add("id").AddAnnotation PrimaryKey, True
     
-    namedClass.Add "Name"
-    namedClass.Add "Position"
-    namedClass.Add "Email"
+    mProperties.Add "Name"
+    mProperties.Add "Position"
+    mProperties.Add "Email"
    
    
 End Sub
-Public Function AsIBaseClass() As IBaseClass
-    Set AsIBaseClass = Me
+Public Function AsORMBaseClass() As ORMBaseClass
+    Set AsORMBaseClass = Me
 End Function
 
-Private Function IBaseClass_CheckErrors() As String
-    IBaseClass_CheckErrors = namedClass.CheckErrors
+Private Function ORMBaseClass_CheckErrors() As String
+    ORMBaseClass_CheckErrors = mProperties.CheckErrors
 End Function
 
-Private Function IBaseClass_GetTableName() As String
-        IBaseClass_GetTableName = "employee"
+Private Function ORMBaseClass_GetTableName() As String
+        ORMBaseClass_GetTableName = "employee"
 End Function
 
-Private Function IBaseClass_Props() As NamedPropertiesClass
-        IBaseClass_Props = namedClass
+Private Function ORMBaseClass_Props() As ORMProperties
+        ORMBaseClass_Props = mProperties
 End Function
 
-Private Function IBaseClass_Save() As Boolean
-    IBaseClass_Save = DataBaseSave(C_clsEmployee, Me)
+Private Function ORMBaseClass_Save() As Boolean
+    ORMBaseClass_Save = DataBaseSave(clsEmployeeType, Me)
 End Function
 
 Public Property Let ID(ByVal value As Variant)
-    namedClass.PropertyByName("ID") = value
+    mProperties.PropertyByName("ID") = value
 End Property
 
 Public Property Get ID() As Variant
-    ID = namedClass.PropertyByName("ID")
+    ID = mProperties.PropertyByName("ID")
 End Property
 
 Public Property Let Name(ByVal value As Variant)
-    namedClass.PropertyByName("Name") = value
+    mProperties.PropertyByName("Name") = value
 End Property
 
 Public Property Get Name() As Variant
-    Name = namedClass.PropertyByName("Name")
+    Name = mProperties.PropertyByName("Name")
 End Property
 
 Public Property Let Position(ByVal value As Variant)
-    namedClass.PropertyByName("Position") = value
+    mProperties.PropertyByName("Position") = value
 End Property
 
 Public Property Get Position() As Variant
-    Position = namedClass.PropertyByName("Position")
+    Position = mProperties.PropertyByName("Position")
 End Property
 
 Public Property Let Email(ByVal value As Variant)
-    namedClass.PropertyByName("Email") = value
+    mProperties.PropertyByName("Email") = value
 End Property
 
 Public Property Get Email() As Variant
-    Email = namedClass.PropertyByName("Email")
+    Email = mProperties.PropertyByName("Email")
 End Property
 

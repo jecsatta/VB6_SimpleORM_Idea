@@ -1,13 +1,13 @@
-Attribute VB_Name = "DatabaseMethods"
+Attribute VB_Name = "ORMDatabase"
 Option Explicit
 
-Public Function DataBaseSelect(ClassName As String, params As clsParams, Optional intLimit As Integer = 0, Optional strOrderBy As String = "") As Variant
+Public Function DataBaseSelect(ClassName As String, params As ORMParams, Optional intLimit As Integer = 0, Optional strOrderBy As String = "") As Variant
     Dim strSQL As String
     Dim tableName As String
     Dim i As Integer
     Dim lastParamValue As Variant
     Dim objReturn() As Variant
-    Dim objClass As IBaseClass
+    Dim objClass As ORMBaseClass
     
     Set objClass = GetCreate(ClassName)
     
@@ -72,10 +72,10 @@ Public Function DataBaseSelectSQL(ClassName As String, strSQL As String) As Vari
     DataBaseSelectSQL = objReturn
 End Function
 
-Public Function DataBaseInsert(ClassName As String, objData As IBaseClass) As Boolean
+Public Function DataBaseInsert(ClassName As String, objData As ORMBaseClass) As Boolean
     Dim strSQL As String
     Dim tableName As String
-    Dim prop As clsProperty
+    Dim prop As ORMProperty
     Dim strFields As String
     Dim strValues As String
     Dim prop2 As Variant
@@ -106,10 +106,10 @@ Public Function DataBaseInsert(ClassName As String, objData As IBaseClass) As Bo
     On Error GoTo 0
 End Function
 
-Public Function DataBaseUpdate(ClassName As String, objData As IBaseClass) As Boolean
+Public Function DataBaseUpdate(ClassName As String, objData As ORMBaseClass) As Boolean
     Dim strSQL As String
     Dim tableName As String
-    Dim prop As clsProperty
+    Dim prop As ORMProperty
     Dim strUpdateFields As String
     Dim primaryKeyField As String
     Dim primaryKeyValue As Variant
@@ -143,10 +143,10 @@ Public Function DataBaseUpdate(ClassName As String, objData As IBaseClass) As Bo
 End Function
 
 
-Public Function DataBaseSave(ClassName As String, objData As IBaseClass) As Boolean
+Public Function DataBaseSave(ClassName As String, objData As ORMBaseClass) As Boolean
     Dim primaryKeyField As String
     Dim primaryKeyValue As Variant
-    Dim prop As clsProperty
+    Dim prop As ORMProperty
     Dim prop2 As Variant
 
     For Each prop2 In objData.Props.GetProperties

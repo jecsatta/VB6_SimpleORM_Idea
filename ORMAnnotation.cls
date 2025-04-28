@@ -6,37 +6,29 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "clsParam"
+Attribute VB_Name = "ORMAnnotation"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private mName As String
+Private mDefinition As AnnotationDefinition
 Private mValue As Variant
-Private mOperator As String
 
-Public Property Let Name(ByVal value As String)
-    mName = value
+Public Property Get Definition() As AnnotationDefinition
+    Definition = mDefinition
 End Property
 
-Public Property Get Name() As String
-    Name = mName
-End Property
-
-Public Property Let value(ByVal value As Variant)
-    mValue = value
+Public Property Let Definition(ByVal value As AnnotationDefinition)
+    mDefinition = value
 End Property
 
 Public Property Get value() As Variant
     value = mValue
 End Property
 
-Public Property Let Operator(ByVal value As String)
-    mOperator = value
+Public Property Let value(ByVal value As Variant)
+    mValue = value
 End Property
 
-Public Property Get Operator() As String
-    Operator = mOperator
-End Property

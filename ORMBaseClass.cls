@@ -6,16 +6,17 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "IBaseClass"
+Attribute VB_Name = "ORMBaseClass"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+Option Explicit
+
 Public Function GetTableName() As String
-        
 End Function
 
-Public Function Props() As NamedPropertiesClass
+Public Function Props() As ORMProperties
 End Function
 
 Public Function CheckErrors() As String

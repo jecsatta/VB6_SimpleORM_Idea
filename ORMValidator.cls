@@ -6,15 +6,15 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "BaseClassFactory"
+Attribute VB_Name = "ORMValidator"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Public Function clsClient_Create() As Object
-    Set clsClient_Create = New clsClient
+Option Explicit
+
+Public Function ValidatorAge(value As Variant) As Boolean
+    ValidatorAge = (value >= 40)
 End Function
 
-Public Function clsEmployee_Create() As Object
-    Set clsEmployee_Create = New clsEmployee
-End Function
+
