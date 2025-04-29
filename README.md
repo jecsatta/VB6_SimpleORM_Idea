@@ -77,11 +77,11 @@ End Function
 #### Properties implementation
 ```vb6
 Public Property Let ID(ByVal value As Variant)
-    mProperties.PropertyByName("ID") = value
+    mProperties.ValueByName("ID") = value
 End Property
 
 Public Property Get ID() As Variant
-    ID = mProperties.PropertyByName("ID")
+    ID = mProperties.ValueByName("ID")
 End Property
 ```
 #### Validators 
