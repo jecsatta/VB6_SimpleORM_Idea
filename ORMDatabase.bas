@@ -1,7 +1,7 @@
 Attribute VB_Name = "ORMDatabase"
 Option Explicit
 
-Public Function DataBaseSelect(ClassName As String, params As ORMParams, Optional intLimit As Integer = 0, Optional strOrderBy As String = "") As Variant
+Public Function ORMSelect(ClassName As String, params As ORMParams, Optional intLimit As Integer = 0, Optional strOrderBy As String = "") As Variant
     Dim strSQL As String
     Dim tableName As String
     Dim i As Integer
@@ -32,9 +32,46 @@ Public Function DataBaseSelect(ClassName As String, params As ORMParams, Optiona
     End If
 
     
-   DataBaseSelect = DataBaseSelectSQL(ClassName, strSQL)
+   ORMSelect = ORMSelectSQL(ClassName, strSQL)
 End Function
-Public Function DataBaseSelectSQL(ClassName As String, strSQL As String) As Variant
+
+Public Function ORMSelectSQLWithProps(ClassName As String, strSQL As String) As Variant
+    Dim rs As Object
+ 
+    Dim objORM As ORMBaseClass
+    Dim objReturn() As Variant
+    Dim field As Object
+    Dim i As Long
+    Dim prop2 As Variant
+    Dim prop As ORMProperty
+    
+    Set rs = CreateObject("ADODB.Recordset")
+    rs.Open strSQL, cn
+ 
+    objReturn = Array()
+    i = 1
+    Do Until rs.EOF
+        Set objORM = GetCreate(ClassName)
+        ReDim Preserve objReturn(i) As Variant
+        
+        For Each prop2 In objORM.Props.GetProperties
+            Set prop = prop2
+            If Not prop.isComputed Then
+                prop.value = rs(prop.Name)
+            End If
+        Next prop2
+        
+        Set objReturn(i) = objORM
+        rs.MoveNext
+        i = i + 1
+    Loop
+    rs.Close
+    Set rs = Nothing
+    
+    ORMSelectSQLWithProps = objReturn
+End Function
+
+Public Function ORMSelectSQL(ClassName As String, strSQL As String) As Variant
     Dim rs As Object
     Dim objClass As Object
     Dim objReturn() As Variant
@@ -43,16 +80,13 @@ Public Function DataBaseSelectSQL(ClassName As String, strSQL As String) As Vari
     
     Set rs = CreateObject("ADODB.Recordset")
     rs.Open strSQL, cn
-    
-    If rs.EOF Then
-        DataBaseSelectSQL = objReturn
-        Exit Function
-    End If
-    
-    
+ 
+    objReturn = Array()
+     
     i = 1
     Do Until rs.EOF
         Set objClass = GetCreate(ClassName)
+        
         ReDim Preserve objReturn(i) As Variant
         For Each field In rs.Fields
             Dim propName As String
@@ -69,10 +103,10 @@ Public Function DataBaseSelectSQL(ClassName As String, strSQL As String) As Vari
     rs.Close
     Set rs = Nothing
     
-    DataBaseSelectSQL = objReturn
+    ORMSelectSQL = objReturn
 End Function
 
-Public Function DataBaseInsert(ClassName As String, objData As ORMBaseClass) As Boolean
+Public Function ORMInsert(ClassName As String, objData As ORMBaseClass) As Boolean
     Dim strSQL As String
     Dim tableName As String
     Dim prop As ORMProperty
@@ -98,15 +132,15 @@ Public Function DataBaseInsert(ClassName As String, objData As ORMBaseClass) As 
     On Error Resume Next
     cn.Execute strSQL
     If Err.Number = 0 Then
-        DataBaseInsert = True
+        ORMInsert = True
     Else
         Debug.Print "Error inserting data: " & Err.Description
-        DataBaseInsert = False
+        ORMInsert = False
     End If
     On Error GoTo 0
 End Function
 
-Public Function DataBaseUpdate(ClassName As String, objData As ORMBaseClass) As Boolean
+Public Function ORMUpdate(ClassName As String, objData As ORMBaseClass) As Boolean
     Dim strSQL As String
     Dim tableName As String
     Dim prop As ORMProperty
@@ -134,16 +168,16 @@ Public Function DataBaseUpdate(ClassName As String, objData As ORMBaseClass) As 
     On Error Resume Next
     cn.Execute strSQL
     If Err.Number = 0 Then
-        DataBaseUpdate = True
+        ORMUpdate = True
     Else
         Debug.Print "Error updating data: " & Err.Description
-        DataBaseUpdate = False
+        ORMUpdate = False
     End If
     On Error GoTo 0
 End Function
 
 
-Public Function DataBaseSave(ClassName As String, objData As ORMBaseClass) As Boolean
+Public Function ORMSave(ClassName As String, objData As ORMBaseClass) As Boolean
     Dim primaryKeyField As String
     Dim primaryKeyValue As Variant
     Dim prop As ORMProperty
@@ -160,8 +194,8 @@ Public Function DataBaseSave(ClassName As String, objData As ORMBaseClass) As Bo
     Next prop2
 
     If IsEmpty(primaryKeyValue) Or IsNull(primaryKeyValue) Then
-        DataBaseSave = DataBaseInsert(ClassName, objData)
+        ORMSave = ORMInsert(ClassName, objData)
     Else
-        DataBaseSave = DataBaseUpdate(ClassName, objData)
+        ORMSave = ORMUpdate(ClassName, objData)
     End If
 End Function

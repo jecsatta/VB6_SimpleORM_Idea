@@ -13,14 +13,14 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private mDefinition As AnnotationDefinition
+Private mDefinition As ORMAnnotationType
 Private mValue As Variant
 
-Public Property Get Definition() As AnnotationDefinition
+Public Property Get Definition() As ORMAnnotationType
     Definition = mDefinition
 End Property
 
-Public Property Let Definition(ByVal value As AnnotationDefinition)
+Public Property Let Definition(ByVal value As ORMAnnotationType)
     mDefinition = value
 End Property
 

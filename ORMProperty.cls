@@ -41,7 +41,7 @@ End Property
 Public Property Let Annotations(values() As ORMAnnotation)
     mAnnotations = values
 End Property
-Public Sub AddAnnotation(ByVal annotationDef As AnnotationDefinition, ByVal annotationValue As Variant)
+Public Sub AddAnnotation(ByVal annotationDef As ORMAnnotationType, ByVal annotationValue As Variant)
     Dim annotation As New ORMAnnotation
     annotation.Definition = annotationDef
     annotation.value = annotationValue
@@ -70,7 +70,7 @@ Public Function CheckErrors() As String
     result = ""
     
     For i = 0 To annotationsCount - 1
-        If mAnnotations(i).Definition = AnnotationDefinition.validator Then
+        If mAnnotations(i).Definition = ORMAnnotationType.Validator Then
             If Not CallByName(objValidator, "" & mAnnotations(i).value, VbMethod, mValue) Then
                 result = result & mName & " value is invalid" & vbNewLine
             End If
@@ -80,7 +80,7 @@ Public Function CheckErrors() As String
  
 End Function
 
-Private Function CheckAnnotationValue(anotation As AnnotationDefinition, value As Variant) As Boolean
+Private Function CheckAnnotationValue(anotation As ORMAnnotationType, value As Variant) As Boolean
     CheckAnnotationValue = False
     Dim i As Integer
     For i = 0 To annotationsCount - 1
@@ -93,7 +93,7 @@ Private Function CheckAnnotationValue(anotation As AnnotationDefinition, value A
     Next i
 End Function
 
-Private Function GetAnnotationValue(anotation As AnnotationDefinition) As Variant
+Private Function GetAnnotationValue(anotation As ORMAnnotationType) As Variant
     Dim i As Integer
     GetAnnotationValue = Nothing
     For i = 0 To annotationsCount

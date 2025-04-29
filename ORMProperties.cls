@@ -38,24 +38,30 @@ Public Function CheckErrors() As String
     CheckErrors = result
 End Function
 
-Public Property Get PropertyByName(ByVal propName As String) As Variant
+Public Property Get ValueByName(ByVal propName As String) As Variant
     Dim propIndex As Integer
     propIndex = GetPropertyIndex(propName)
-    PropertyByName = Properties(propIndex).value
+    ValueByName = Properties(propIndex).value
 End Property
 
-Public Property Let PropertyByName(ByVal propName As String, ByVal propValue As Variant)
+Public Property Let ValueByName(ByVal propName As String, ByVal propValue As Variant)
     Dim propIndex As Integer
     propIndex = GetPropertyIndex(propName)
     Properties(propIndex).value = propValue
 End Property
 
-Public Sub AddWithValue(ByVal propName As String, ByVal propValue As Variant, Optional ByVal annotationDef As AnnotationDefinition = None, Optional ByVal annotationValue As Variant)
+Public Property Get PropertyByName(ByVal propName As String) As ORMProperty
+    Dim propIndex As Integer
+    propIndex = GetPropertyIndex(propName)
+    PropertyByName = Properties(propIndex)
+End Property
+
+Public Sub AddWithValue(ByVal propName As String, ByVal propValue As Variant, Optional ByVal annotationDef As ORMAnnotationType = None, Optional ByVal annotationValue As Variant)
     Add propName, annotationDef, annotationValue
     Properties(propNumber - 1).value = propValue
 End Sub
 
-Public Function Add(ByVal propName As String, Optional ByVal annotationDef As AnnotationDefinition = None, Optional ByVal annotationValue As Variant) As ORMProperty
+Public Function Add(ByVal propName As String, Optional ByVal annotationDef As ORMAnnotationType = None, Optional ByVal annotationValue As Variant) As ORMProperty
     ReDim Preserve Properties(propNumber) As ORMProperty
     Dim prop As New ORMProperty
     prop.Name = propName

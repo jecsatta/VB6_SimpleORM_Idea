@@ -43,41 +43,41 @@ Private Function ORMBaseClass_Props() As ORMProperties
 End Function
 
 Private Function ORMBaseClass_Save() As Boolean
-    ORMBaseClass_Save = DataBaseSave(clsClienteType, Me)
+    ORMBaseClass_Save = ORMSave(clsClienteType, Me)
 End Function
 
 
 Public Property Let ID(ByVal value As Variant)
-    mProperties.PropertyByName("ID") = value
+    mProperties.ValueByName("ID") = value
 End Property
 
 Public Property Get ID() As Variant
-    ID = mProperties.PropertyByName("ID")
+    ID = mProperties.ValueByName("ID")
 End Property
 
 Public Property Let Name(ByVal value As Variant)
-    mProperties.PropertyByName("Name") = value
+    mProperties.ValueByName("Name") = value
 End Property
 
 Public Property Get Name() As Variant
-   Name = mProperties.PropertyByName("Name")
+   Name = mProperties.ValueByName("Name")
    
 End Property
 
 Public Property Let Age(ByVal value As Variant)
-    mProperties.PropertyByName("Age") = value
+    mProperties.ValueByName("Age") = value
 End Property
 
 Public Property Get Age() As Variant
-    Age = mProperties.PropertyByName("Age")
+    Age = mProperties.ValueByName("Age")
 End Property
 
 Public Property Let Email(ByVal value As Variant)
-    mProperties.PropertyByName("Email") = value
+    mProperties.ValueByName("Email") = value
 End Property
 
 Public Property Get Email() As Variant
-    Email = mProperties.PropertyByName("Email")
+    Email = mProperties.ValueByName("Email")
 End Property
 
 

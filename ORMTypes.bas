@@ -1,7 +1,7 @@
 Attribute VB_Name = "ORMTypes"
 Option Explicit
 
-Public Enum AnnotationDefinition
+Public Enum ORMAnnotationType
     None
     PrimaryKey
     UniqueKey

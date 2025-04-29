@@ -3,11 +3,28 @@ Option Explicit
 Public cn                As New ADODB.Connection
 Dim vConnectionString As String
 
+Sub test()
+    Dim startTime As Single
+    Dim endTime As Single
+    Dim elapsedTime As Single
+    Dim objArray As Variant
+
+    startTime = Timer
+    objArray = ORMSelectSQL(clsClienteType, "select * from client order by id")
+    endTime = Timer
+    elapsedTime = endTime - startTime
+    Debug.Print "Execution time: " & Format(elapsedTime, "0.000") & " seconds"
+    
+    startTime = Timer
+    objArray = ORMSelectSQLWithProps(clsClienteType, "select * from client order by id")
+    endTime = Timer
+    elapsedTime = endTime - startTime
+    Debug.Print "Execution time: " & Format(elapsedTime, "0.000") & " seconds"
+End Sub
 Public Sub Main()
     Dim objArray As Variant
     Dim objClient As clsClient
     Dim objEmployee As clsEmployee
-    Dim dictParams As New Dictionary
     Dim i As Long
     
     vConnectionString = "Provider=MSDASQL.1;Persist Security Info=False;User ID=postgres;Data Source=Conexao"
@@ -35,7 +52,7 @@ Public Sub Main()
         Debug.Print "Error saving client."
     End If
     
-    objArray = DataBaseSelectSQL(clsClienteType, "select * from client")
+    objArray = ORMSelectSQL(clsClienteType, "select * from client order by id")
     Debug.Print "Count:" & UBound(objArray)
     For i = 1 To UBound(objArray)
       Set objClient = objArray(i)
@@ -46,37 +63,39 @@ Public Sub Main()
        Debug.Print ""
        Debug.Print ""
     Next i
-     
+ 
+ 
+ 
      
     Dim params As New ORMParams
     params.Add "name", "%New%", "ilike"
   '  params.Add "id", 6
-    objArray = DataBaseSelect(clsClienteType, params)
-    If HasValues(objArray) Then
-        Debug.Print "Count:" & UBound(objArray)
-        For i = 1 To UBound(objArray)
-           Set objClient = objArray(i)
-           Debug.Print "ID:" & objClient.ID
-           Debug.Print "Name:" & objClient.Name
-           Debug.Print "Age:" & objClient.Age
-           Debug.Print "Email:" & objClient.Email
-           Debug.Print "Errors:"; objClient.AsORMBaseClass.CheckErrors
-           Debug.Print ""
-        Next i
-    End If
+    objArray = ORMSelect(clsClienteType, params)
     
-    objArray = DataBaseSelectSQL(clsEmployeeType, "select * from employee")
-    If HasValues(objArray) Then
-        Debug.Print "Count:" & UBound(objArray)
-        For i = 1 To UBound(objArray)
-          Set objEmployee = objArray(i)
-           Debug.Print "ID:" & objEmployee.ID
-           Debug.Print "Name:" & objEmployee.Name
-           Debug.Print "Position:" & objEmployee.Position
-           Debug.Print "Email:" & objEmployee.Email
-           Debug.Print ""
-           Debug.Print ""
-        Next i
-     End If
+    Debug.Print "Count:" & UBound(objArray)
+    For i = 1 To UBound(objArray)
+       Set objClient = objArray(i)
+       Debug.Print "ID:" & objClient.ID
+       Debug.Print "Name:" & objClient.Name
+       Debug.Print "Age:" & objClient.Age
+       Debug.Print "Email:" & objClient.Email
+       Debug.Print "Errors:"; objClient.AsORMBaseClass.CheckErrors
+       Debug.Print ""
+    Next i
+
+    
+    objArray = ORMSelectSQL(clsEmployeeType, "select * from employee")
+    
+    Debug.Print "Count:" & UBound(objArray)
+    For i = 1 To UBound(objArray)
+      Set objEmployee = objArray(i)
+       Debug.Print "ID:" & objEmployee.ID
+       Debug.Print "Name:" & objEmployee.Name
+       Debug.Print "Position:" & objEmployee.Position
+       Debug.Print "Email:" & objEmployee.Email
+       Debug.Print ""
+       Debug.Print ""
+    Next i
+
 
 End Sub
