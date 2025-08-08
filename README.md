@@ -2,6 +2,8 @@
 
 A powerful yet simple idea of Object-Relational Mapping library for Visual Basic 6, designed for modern development practices with DLL compilation support, dependency injection, and advanced ORM features.
 
+Educational Porpuses only!
+
 ## Usage in 
 `Module1.bas`
 ```vb6
