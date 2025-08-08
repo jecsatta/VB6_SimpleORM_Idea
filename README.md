@@ -1,42 +1,53 @@
-# VB6 Simple ORM Idea
-Just a simple idea of how to create dynamic classes using vb6 to perform access and fetch data stored in a database and little more.
+# VB6 Simple ORM
 
-## Usage
+A powerful yet simple idea of Object-Relational Mapping library for Visual Basic 6, designed for modern development practices with DLL compilation support, dependency injection, and advanced ORM features.
+
+## Usage in 
+`Module1.bas`
 ```vb6
-Dim objArray As Variant
-Dim objClient As clsClient
-Dim objEmployee As clsEmployee
-Dim i As Long
-Dim params As New ORMParams
+Option Explicit
 
-Set objClient = GetCreate(clsClienteType)
+Public gFactory As New MyFactory
+Public gcore As New ORMCore
+Public gValidator As New MyValidator
 
-'objClient.ID = 1
-objClient.Name = "Updated client"
-objClient.Age = 35
-objClient.Email = "client@example.com"
- 'Save the client (insert or update based on primary key)
-If objClient.AsORMBaseClass.Save Then
-    Debug.Print "Client saved successfully!"
-Else
-    Debug.Print "Error saving client."
-End If
+Sub Main()
+  Dim objArray As Variant
+  Dim objClient As clsClient
+  Dim objEmployee As clsEmployee
+  Dim i As Long
+  Dim params As New ORMParams
+  Dim connStr As String
+  
+  connStr = "Provider=MSDASQL.1;Persist Security Info=False;User ID=postgres;Data Source=Conn"
+  Set objClient = gFactory.clsClient_Create
 
-params.Add "name", "%mary%", "ilike"
-params.Add "id", 6
-objArray = DataBaseSelect(clsClienteType, params)
-If HasValues(objArray) Then
-    Debug.Print "Count:" & UBound(objArray)
-    For i = 1 To UBound(objArray)
-        Set objClient = objArray(i)
-        Debug.Print "ID:" & objClient.ID
-        Debug.Print "Name:" & objClient.Name
-        Debug.Print "Age:" & objClient.Age
-        Debug.Print "Email:" & objClient.Email
-        Debug.Print "Errors:"; objClient.AsORMBaseClass.CheckErrors
-        Debug.Print ""
-    Next i
-End If
+  objClient.ID = 1
+  objClient.Name = "Updated client"
+  objClient.Age = 45
+  objClient.Email = "client@example.com"
+   'Save the client (insert or update based on primary key)
+  If objClient.AsEntity.Save Then
+      Debug.Print "Client saved successfully!"
+  Else
+      Debug.Print "Error saving client."
+  End If
+
+  params.Add "name", "%mary%", "ilike"
+  params.Add "id", 6
+  objArray = gcore.QueryParams(gFactory.clsClientType, params)
+  
+  Debug.Print "Count:" & UBound(objArray)
+  For i = 1 To UBound(objArray)
+     Set objClient = objArray(i)
+     Debug.Print "ID:" & objClient.ID
+     Debug.Print "Name:" & objClient.Name
+     Debug.Print "Age:" & objClient.Age
+     Debug.Print "Email:" & objClient.Email
+     Debug.Print "Errors:" & objClient.AsEntity.CheckErrors
+     Debug.Print ""
+  Next i
+End Sub
 
 'Example of execution
 Count:1
@@ -48,54 +59,61 @@ Errors:Age value is invalid
 ```
 
 #### Classes setup
-Databases classes must implement `ORMBaseClass`
+Entity classes must implement `IORMEntity`
 
 In `Class_Initialize` all properties and annotations must be added
-`File:clsClient.bas`
+`File:clsClient.cls`
 ```vb6
-
-Implements ORMBaseClass
+Implements IORMEntity
 Private mProperties As ORMProperties
-
 Public Sub Class_Initialize()
     Set mProperties = New ORMProperties
     mProperties.Add "id", PrimaryKey, True
     mProperties.Add "Name"
-    mProperties.Add "Age", validator, ValidatorAge
-    mProperties.Add "Email"
+    mProperties.Add "Age", Validator, gValidator.ValidatorAge
+    mProperties.Add "Email"   
 End Sub
-
-Private Function ORMBaseClass_GetTableName() As String
-        ORMBaseClass_GetTableName = "client"
+Private Function IORMEntity_GetTableName() As String
+        IORMEntity_GetTableName = "client"
 End Function
-
-Private Function ORMBaseClass_Props() As ORMProperties
-      Set ORMBaseClass_Props = mProperties
+Private Function IORMEntity_Props() As ORMProperties
+      Set IORMEntity_Props = mProperties
 End Function
+```
+You must have a concrete Factory class of IORMFactory with all yours entity classes e.g.: `MyFactory.bas`
+
+```vb6
+Implements IORMFactory
+
+Public Property Get clsClientType() As String: clsClientType = "clsClient": End Property
+Public Function clsClient_Create() As Object: Set clsClient_Create = New clsClient: End Function
+
+Public Property Get clsEmployeeType() As String: clsEmployeeType = "clsEmployee": End Property
+Public Function clsEmployee_Create() As Object: Set clsEmployee_Create = New clsEmployee: End Function
 ```
 
 #### Properties implementation
 ```vb6
-Public Property Let ID(ByVal value As Variant)
-    mProperties.ValueByName("ID") = value
-End Property
+Public Property Let ID(ByVal value As Variant):    mProperties.value("ID") = value: End Property
+Public Property Get ID() As Variant:    ID = mProperties.value("ID"): End Property
 
-Public Property Get ID() As Variant
-    ID = mProperties.ValueByName("ID")
-End Property
+Public Property Let Name(ByVal value As Variant): mProperties.value("Name") = value: End Property
+Public Property Get Name() As Variant: Name = mProperties.value("Name"): End Property
 ```
 #### Validators 
-All Validator must be in `ORMValidator.cls` and in `ORMValidators.bas`
+Your concrete validator class must implement IORMValidator
 
-`File:ORMValidator.cls`
+`File:MyValidator.cls`
 ```vb6
-Public Function ValidatorAge(value As Variant) As Boolean
-    ValidatorAge = (value >= 40)
+Option Explicit
+
+Implements IORMValidator
+
+'Validator Age
+Public Property Get ValidatorAge(): ValidatorAge = "ValidatorAgeFunction": End Property
+Public Function ValidatorAgeFunction(value As Variant) As Boolean
+    ValidatorAgeFunction = (value >= 40)
 End Function
-```
-`File:ORMValidators.bas`
-```vb6
-Public Const ValidatorAge As String = "ValidatorAge"
 ```
 
 | To-do | Status |
