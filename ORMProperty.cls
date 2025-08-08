@@ -8,9 +8,9 @@ BEGIN
 END
 Attribute VB_Name = "ORMProperty"
 Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
+Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_Exposed = True
 Option Explicit
 
 Private mName As String
@@ -70,8 +70,8 @@ Public Function CheckErrors() As String
     result = ""
     
     For i = 0 To annotationsCount - 1
-        If mAnnotations(i).Definition = ORMAnnotationType.Validator Then
-            If Not CallByName(objValidator, "" & mAnnotations(i).value, VbMethod, mValue) Then
+        If mAnnotations(i).Definition = ORMAnnotationType.validator Then
+            If Not CallByName(g_Validator, "Validate", VbMethod, "" & mAnnotations(i).value, mValue) Then
                 result = result & mName & " value is invalid" & vbNewLine
             End If
         End If

@@ -10,13 +10,26 @@ Attribute VB_Name = "ORMAnnotation"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_Exposed = True
 Option Explicit
+Public Enum ORMAnnotationType
+    None
+    PrimaryKey
+    UniqueKey
+    AutoIncrement
+    MaxLength
+    MinLength
+    Required
+    Validator
+    Computed
+End Enum
+
+
 
 Private mDefinition As ORMAnnotationType
 Private mValue As Variant
 
-Public Property Get Definition() As ORMAnnotationType
+Public Property Get Definition() As Long
     Definition = mDefinition
 End Property
 

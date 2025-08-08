@@ -10,7 +10,7 @@ Attribute VB_Name = "ORMProperties"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_Exposed = True
 Option Explicit
 
 Private Properties() As ORMProperty
@@ -38,40 +38,40 @@ Public Function CheckErrors() As String
     CheckErrors = result
 End Function
 
-Public Property Get ValueByName(ByVal propName As String) As Variant
+Public Property Get Value(ByVal propName As String) As Variant
     Dim propIndex As Integer
     propIndex = GetPropertyIndex(propName)
-    ValueByName = Properties(propIndex).value
+    Value = Properties(propIndex).Value
 End Property
 
-Public Property Let ValueByName(ByVal propName As String, ByVal propValue As Variant)
+Public Property Let Value(ByVal propName As String, ByVal propValue As Variant)
     Dim propIndex As Integer
     propIndex = GetPropertyIndex(propName)
-    Properties(propIndex).value = propValue
+    Properties(propIndex).Value = propValue
 End Property
 
-Public Property Get PropertyByName(ByVal propName As String) As ORMProperty
+Public Property Get Prop(ByVal propName As String) As ORMProperty
     Dim propIndex As Integer
     propIndex = GetPropertyIndex(propName)
-    PropertyByName = Properties(propIndex)
+    Prop = Properties(propIndex)
 End Property
 
 Public Sub AddWithValue(ByVal propName As String, ByVal propValue As Variant, Optional ByVal annotationDef As ORMAnnotationType = None, Optional ByVal annotationValue As Variant)
     Add propName, annotationDef, annotationValue
-    Properties(propNumber - 1).value = propValue
+    Properties(propNumber - 1).Value = propValue
 End Sub
 
 Public Function Add(ByVal propName As String, Optional ByVal annotationDef As ORMAnnotationType = None, Optional ByVal annotationValue As Variant) As ORMProperty
     ReDim Preserve Properties(propNumber) As ORMProperty
-    Dim prop As New ORMProperty
-    prop.Name = propName
+    Dim Prop As New ORMProperty
+    Prop.Name = propName
     
     If annotationDef <> None Then
-        prop.AddAnnotation annotationDef, annotationValue
+        Prop.AddAnnotation annotationDef, annotationValue
     End If
-    Set Properties(propNumber) = prop
+    Set Properties(propNumber) = Prop
     propNumber = propNumber + 1
-    Set Add = prop
+    Set Add = Prop
 End Function
  
 Public Function GetProperties() As ORMProperty()
@@ -84,7 +84,7 @@ Public Function GetPropertyValues() As Variant()
     
     ReDim values(LBound(Properties) To UBound(Properties)) As Variant
     For i = LBound(Properties) To UBound(Properties)
-        values(i) = Properties(i).value
+        values(i) = Properties(i).Value
     Next i
     
     GetPropertyValues = values

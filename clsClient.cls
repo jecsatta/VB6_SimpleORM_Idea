@@ -13,7 +13,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Implements ORMBaseClass
+Implements IORMEntity
 
 Private mProperties As ORMProperties
  
@@ -22,62 +22,40 @@ Public Sub Class_Initialize()
     Set mProperties = New ORMProperties
     mProperties.Add "id", PrimaryKey, True
     mProperties.Add "Name"
-    mProperties.Add "Age", Validator, ValidatorAge
+    mProperties.Add "Age", Validator, gValidator.ValidatorAge
     mProperties.Add "Email"
     
 End Sub
-Public Function AsORMBaseClass() As ORMBaseClass
-    Set AsORMBaseClass = Me
+Public Function AsIORMEntity() As IORMEntity
+    Set AsIORMEntity = Me
 End Function
 
-Private Function ORMBaseClass_CheckErrors() As String
-    ORMBaseClass_CheckErrors = mProperties.CheckErrors
+Private Function IORMEntity_CheckErrors() As String
+    IORMEntity_CheckErrors = mProperties.CheckErrors
 End Function
 
-Private Function ORMBaseClass_GetTableName() As String
-        ORMBaseClass_GetTableName = "client"
+Private Function IORMEntity_GetTableName() As String
+        IORMEntity_GetTableName = "client"
 End Function
 
-Private Function ORMBaseClass_Props() As ORMProperties
-      Set ORMBaseClass_Props = mProperties
+Private Function IORMEntity_Props() As ORMProperties
+      Set IORMEntity_Props = mProperties
 End Function
 
-Private Function ORMBaseClass_Save() As Boolean
-    ORMBaseClass_Save = ORMSave(clsClienteType, Me)
+Private Function IORMEntity_Save() As Boolean
+        IORMEntity_Save = gcore.ORMSave(gFactory.clsClientType, Me)
 End Function
 
+Public Property Let ID(ByVal value As Variant):    mProperties.value("ID") = value: End Property
+Public Property Get ID() As Variant:    ID = mProperties.value("ID"): End Property
 
-Public Property Let ID(ByVal value As Variant)
-    mProperties.ValueByName("ID") = value
-End Property
+Public Property Let Name(ByVal value As Variant): mProperties.value("Name") = value: End Property
+Public Property Get Name() As Variant: Name = mProperties.value("Name"): End Property
 
-Public Property Get ID() As Variant
-    ID = mProperties.ValueByName("ID")
-End Property
+Public Property Let Age(ByVal value As Variant): mProperties.value("Age") = value: End Property
+Public Property Get Age() As Variant: Age = mProperties.value("Age"): End Property
 
-Public Property Let Name(ByVal value As Variant)
-    mProperties.ValueByName("Name") = value
-End Property
-
-Public Property Get Name() As Variant
-   Name = mProperties.ValueByName("Name")
-   
-End Property
-
-Public Property Let Age(ByVal value As Variant)
-    mProperties.ValueByName("Age") = value
-End Property
-
-Public Property Get Age() As Variant
-    Age = mProperties.ValueByName("Age")
-End Property
-
-Public Property Let Email(ByVal value As Variant)
-    mProperties.ValueByName("Email") = value
-End Property
-
-Public Property Get Email() As Variant
-    Email = mProperties.ValueByName("Email")
-End Property
+Public Property Let Email(ByVal value As Variant): mProperties.value("Email") = value: End Property
+Public Property Get Email() As Variant: Email = mProperties.value("Email"): End Property
 
 
