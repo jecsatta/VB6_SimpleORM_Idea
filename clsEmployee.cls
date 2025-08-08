@@ -15,22 +15,18 @@ Option Explicit
 
 Implements IORMEntity
 
-
 Private mProperties As ORMProperties
- 
-    
+
 Public Sub Class_Initialize()
     Set mProperties = New ORMProperties
     mProperties.Add("id").AddAnnotation PrimaryKey, True
-    
     mProperties.Add "Name"
     mProperties.Add "Position"
     mProperties.Add "Email"
-   
-   
 End Sub
-Public Function AsIORMEntity() As IORMEntity
-    Set AsIORMEntity = Me
+
+Public Function AsEntity() As IORMEntity
+    Set AsEntity = Me
 End Function
 
 Private Function IORMEntity_CheckErrors() As String

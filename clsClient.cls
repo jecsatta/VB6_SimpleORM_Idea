@@ -26,8 +26,9 @@ Public Sub Class_Initialize()
     mProperties.Add "Email"
     
 End Sub
-Public Function AsIORMEntity() As IORMEntity
-    Set AsIORMEntity = Me
+
+Public Function AsEntity() As IORMEntity
+    Set AsEntity = Me
 End Function
 
 Private Function IORMEntity_CheckErrors() As String

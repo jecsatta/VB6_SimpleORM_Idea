@@ -20,10 +20,10 @@ Public Function IORMFactory_GetCreate(ClassName As String) As Object
 End Function
 
 Public Property Get clsClientType() As String: clsClientType = "clsClient": End Property
-Public Function clsClient_Create() As Object:    Set clsClient_Create = New clsClient: End Function
+Public Function clsClient_Create() As Object: Set clsClient_Create = New clsClient: End Function
 
 Public Property Get clsEmployeeType() As String: clsEmployeeType = "clsEmployee": End Property
-Public Function clsEmployee_Create() As Object:    Set clsEmployee_Create = New clsEmployee: End Function
+Public Function clsEmployee_Create() As Object: Set clsEmployee_Create = New clsEmployee: End Function
 
 
 

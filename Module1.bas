@@ -2,7 +2,7 @@ Attribute VB_Name = "Module1"
 Option Explicit
 
 Public gFactory As New MyFactory
-Public gcore As New ormcore
+Public gcore As New ORMCore
 Public gValidator As New MyValidator
 
 Sub Main()
@@ -13,6 +13,7 @@ Sub Main()
     Dim connStr As String
     connStr = "Provider=MSDASQL.1;Persist Security Info=False;User ID=postgres;Data Source=Conexao"
     gcore.Initialize connStr, "POSTGRES", gFactory, gValidator
+    
     gcore.ExecuteNonQuery "create table if not exists client(id serial primary key, name text,age int,email text);"
     gcore.ExecuteNonQuery "create table if not exists employee(id serial primary key, name text,position text,email text);"
     
@@ -31,7 +32,7 @@ Sub Main()
     objClient.Age = 45
     objClient.Email = "client@example.com"
      'Save the client (insert or update based on primary key)
-    If objClient.AsIORMEntity.Save Then
+    If objClient.AsEntity.Save Then
         Debug.Print "Client saved successfully!"
     Else
         Debug.Print "Error saving client."
@@ -47,7 +48,7 @@ Sub Main()
        Debug.Print "Name:" & objClient.Name
        Debug.Print "Age:" & objClient.Age
        Debug.Print "Email:" & objClient.Email
-       Debug.Print "Errors:" & objClient.AsIORMEntity.CheckErrors
+       Debug.Print "Errors:" & objClient.AsEntity.CheckErrors
        Debug.Print ""
     Next i
  
@@ -55,7 +56,7 @@ Sub Main()
  
      
     Dim params As New ORMParams
-    params.Add "name", "%New%", "ilike"
+    params.Add "name", "%mary%", "ilike"
   '  params.Add "id", 6
     objArray = gcore.QueryParams(gFactory.clsClientType, params)
     
@@ -66,7 +67,7 @@ Sub Main()
        Debug.Print "Name:" & objClient.Name
        Debug.Print "Age:" & objClient.Age
        Debug.Print "Email:" & objClient.Email
-       Debug.Print "Errors:"; objClient.AsIORMEntity.CheckErrors
+       Debug.Print "Errors:" & objClient.AsEntity.CheckErrors
        Debug.Print ""
     Next i
 
