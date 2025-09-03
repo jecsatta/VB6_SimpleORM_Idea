@@ -20,6 +20,8 @@ Sub Main()
   Dim connStr As String
   
   connStr = "Provider=MSDASQL.1;Persist Security Info=False;User ID=postgres;Data Source=Conn"
+  gcore.Initialize connStr, "POSTGRES", gFactory, gValidator
+
   Set objClient = gFactory.clsClient_Create
 
   objClient.ID = 1
