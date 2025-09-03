@@ -1,6 +1,6 @@
 Type=Exe
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\Windows\SysWOW64\stdole2.tlb#OLE Automation
-Reference=*\G{FA5F922D-728F-4B1C-8512-A11E39144524}#9.0#0#VB6SimpleORM.dll#
+Reference=*\G{FA5F922D-728F-4B1C-8512-A11E39144524}#a.0#0#VB6SimpleORM.dll#
 Class=clsClient; clsClient.cls
 Class=clsEmployee; clsEmployee.cls
 Form=Form1.frm

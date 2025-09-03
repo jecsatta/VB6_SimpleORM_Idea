@@ -1,3 +1,3 @@
 VBGROUP 5.0
-Project=VB6SimpleORM.vbp
-StartupProject=VB6SimpleORMTest.vbp
+Project=src\VB6SimpleORM.vbp
+StartupProject=test\VB6SimpleORMTest.vbp
